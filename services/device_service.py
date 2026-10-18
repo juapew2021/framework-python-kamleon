@@ -26,3 +26,14 @@ class DeviceService:
             device_id,
             mode
         )
+
+    def change_firmware(
+        self,
+        device_id,
+        payload
+    ):
+
+        return self.client.change_firmware(
+            device_id,
+            payload
+        )

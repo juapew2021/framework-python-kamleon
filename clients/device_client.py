@@ -26,3 +26,14 @@ class DeviceClient:
                 "mode": mode
             }
         )
+
+    def change_firmware(
+        self,
+        device_id,
+        payload
+    ):
+
+        return requests.post(
+            f"{BASE_URL}/api/v1/devices/{device_id}/firmware-update",
+            json=payload
+        )
