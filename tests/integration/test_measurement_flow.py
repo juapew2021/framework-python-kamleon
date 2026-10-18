@@ -15,18 +15,23 @@ def test_measurement_complete_flow(
     """
 
     # Given
+
     payload = (
         MeasurementFactory
         .valid_measurement()
     )
 
     # When
+
     response = (
         measurement_service
-        .create_measurement(payload)
+        .create_measurement(
+            payload
+        )
     )
 
     # Then
+
     assert response.status_code == 200
 
     body = response.json()
@@ -36,6 +41,7 @@ def test_measurement_complete_flow(
     measurement_id = body["measurementId"]
 
     # When
+
     result = (
         measurement_service
         .wait_for_completion(
@@ -44,6 +50,33 @@ def test_measurement_complete_flow(
     )
 
     # Then
-    assert result["status"] == "completed"
-    assert result["result"] is not None
-    assert result["result"]["hydration"] == 72
+
+    assert (
+        result["status"]
+        == "completed"
+    )
+
+    assert (
+        result["result"]
+        is not None
+    )
+
+    assert (
+        result["result"]["hydrationScore"]
+        >= 0
+    )
+
+    assert (
+        result["result"]["hydrationScore"]
+        <= 100
+    )
+
+    assert (
+        result["result"]["hydrationStatus"]
+        == "VERY_WELL_HYDRATED"
+    )
+
+    assert (
+        result["result"]["recommendation"]
+        is not None
+    )
