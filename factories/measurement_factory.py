@@ -1,0 +1,17 @@
+class MeasurementFactory:
+
+    @staticmethod
+    def valid_measurement():
+
+        return {
+            "deviceId": "URINAL-001",
+            "userId": "USER-123",
+            "sessionId": "SESSION-456",
+            "startedAt": "2026-09-20T10:00:00Z",
+            "completedAt": "2026-09-20T10:00:18Z",
+            "sensorData": {
+                "volume": 320,
+                "ph": 6.2,
+                "temperature": 36.4
+            }
+        }
