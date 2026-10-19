@@ -1,0 +1,110 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","6","test_recommendation_generated","tests.api","2026-10-19","passed","2026-10-19","","test_recommendation_generation","",""
+"
+    Feature:
+        Anonymous Measurement
+
+    Scenario:
+        Anonymous user submits sample
+    ","14","test_anonymous_measurement","tests.api","2026-10-19","passed","2026-10-19","","test_anonymous_measurement","",""
+"
+    Feature:
+        Device Management
+
+    Scenario:
+        Change device mode
+
+    Given
+        an existing device
+
+    When
+        maintenance mode is requested
+
+    Then
+        device mode should be maintenance
+    ","3","test_change_device_to_maintenance_mode","tests.integration","2026-10-19","passed","2026-10-19","","test_device_mode_flow","",""
+"
+    Given a measurement in progress
+    When the device disconnects
+    Then measurement processing stops safely
+    Priority: P1
+    ","6","test_device_disconnect_mid_measurement","tests.integration","2026-10-19","passed","2026-10-19","","test_device_disconnect_mid_measurement","",""
+"","6","test_insufficient_volume_measurement","tests.api","2026-10-19","passed","2026-10-19","","test_insufficient_volume_measurement","",""
+"
+    Given technically valid sensor data
+    When the hydration analysis is clinically implausible
+    Then the result is flagged as suspicious
+    Priority: P1
+    ","4","test_clinically_implausible_measurement[-1-6.2]","tests.api","2026-10-19","passed","2026-10-19","","test_clinically_implausible_measurement","",""
+"
+    Given technically valid sensor data
+    When the hydration analysis is clinically implausible
+    Then the result is flagged as suspicious
+    Priority: P1
+    ","4","test_clinically_implausible_measurement[101-6.2]","tests.api","2026-10-19","passed","2026-10-19","","test_clinically_implausible_measurement","",""
+"
+    Feature:
+        Device Firmware Management
+
+    Scenario:
+        Update device firmware
+    ","2","test_firmware_update_flow","tests.integration","2026-10-19","passed","2026-10-19","","test_firmware_update_flow","",""
+"
+    Feature:
+        Measurement Processing
+
+    Scenario:
+        Complete measurement lifecycle
+    ","8","test_measurement_complete_flow","tests.integration","2026-10-19","passed","2026-10-19","","test_measurement_flow","",""
+"","6","test_hydration_score_generation","tests.api","2026-10-19","passed","2026-10-19","","test_hydration_score_generation","",""
+"
+    Given an existing measurement
+    When the same measurement is submitted twice
+    Then the system detects the duplicate without processing it twice
+    Priority: P1
+    ","5","test_duplicate_measurement","tests.api","2026-10-19","passed","2026-10-19","","test_duplicate_measurement","",""
+"
+    Feature:
+        Device Management
+
+    Scenario:
+        Firmware update fails
+    ","1","test_firmware_update_failure","tests.integration","2026-10-19","passed","2026-10-19","","test_firmware_update_flow","",""
+"
+    Given a firmware update has started
+    When the update fails
+    Then the previous firmware remains active
+    Priority: P1
+    ","5","test_firmware_update_failure","tests.integration","2026-10-19","passed","2026-10-19","","test_firmware_update_failure","",""
+"
+    Given the Data API returns a malformed payload
+    When hydration processing occurs
+    Then the payload is rejected with a controlled error
+    Priority: P2
+    ","5","test_invalid_api_response","tests.api","2026-10-19","passed","2026-10-19","","test_invalid_api_response","",""
+"
+    Feature:
+        Reliability
+
+    Scenario:
+        Backend unavailable
+    ","1","test_backend_unavailable","tests.integration","2026-10-19","passed","2026-10-19","","test_backend_unavailable","",""
+"
+    Feature:
+        Security
+
+    Scenario:
+        User cannot access another user's measurement
+    ","1","test_wrong_user_association","tests.api","2026-10-19","passed","2026-10-19","","test_wrong_user_association","",""
+"
+    Given technically valid sensor data
+    When the hydration analysis is clinically implausible
+    Then the result is flagged as suspicious
+    Priority: P1
+    ","4","test_clinically_implausible_measurement[75-14.0]","tests.api","2026-10-19","passed","2026-10-19","","test_clinically_implausible_measurement","",""
+"
+    Given measurements stored locally during offline mode
+    When the device reconnects
+    Then buffered measurements are uploaded and processed in order
+    Priority: P1
+    ","17","test_buffered_measurement_upload","tests.integration","2026-10-19","passed","2026-10-19","","test_buffered_measurement_upload","",""

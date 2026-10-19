@@ -1,8 +1,17 @@
+import allure
+
 from factories.measurement_factory import (
     MeasurementFactory
 )
 
+from utils.allure_api_logger import (
+    AllureApiLogger
+)
 
+
+@allure.feature("Measurement Processing")
+@allure.story("Complete Measurement Lifecycle")
+@allure.severity(allure.severity_level.CRITICAL)
 def test_measurement_complete_flow(
     measurement_service
 ):
@@ -14,69 +23,100 @@ def test_measurement_complete_flow(
         Complete measurement lifecycle
     """
 
-    # Given
+    with allure.step(
+        "Create measurement request"
+    ):
 
-    payload = (
-        MeasurementFactory
-        .valid_measurement()
-    )
-
-    # When
-
-    response = (
-        measurement_service
-        .create_measurement(
-            payload
+        payload = (
+            MeasurementFactory
+            .valid_measurement()
         )
-    )
 
-    # Then
+        response = (
+            measurement_service
+            .create_measurement(
+                payload
+            )
+        )
 
-    assert response.status_code == 200
+        AllureApiLogger.attach_request(
+            endpoint="/api/v1/measurements",
+            method="POST",
+            payload=payload
+        )
 
-    body = response.json()
+        AllureApiLogger.attach_response(
+            response
+        )
 
-    assert body["status"] == "processing"
+        assert response.status_code == 200
 
-    measurement_id = body["measurementId"]
+    with allure.step(
+        "Validate measurement created"
+    ):
 
-    # When
+        body = response.json()
 
-    result = (
-        measurement_service
-        .wait_for_completion(
+        assert (
+            body["status"]
+            == "processing"
+        )
+
+        measurement_id = (
+            body["measurementId"]
+        )
+
+        AllureApiLogger.attach_text(
+            "Measurement ID",
             measurement_id
         )
-    )
 
-    # Then
+    with allure.step(
+        "Wait for measurement completion"
+    ):
 
-    assert (
-        result["status"]
-        == "completed"
-    )
+        result = (
+            measurement_service
+            .wait_for_completion(
+                measurement_id
+            )
+        )
 
-    assert (
-        result["result"]
-        is not None
-    )
+        AllureApiLogger.attach_json(
+            "Completed Measurement Response",
+            result
+        )
 
-    assert (
-        result["result"]["hydrationScore"]
-        >= 0
-    )
+    with allure.step(
+        "Validate hydration result"
+    ):
 
-    assert (
-        result["result"]["hydrationScore"]
-        <= 100
-    )
+        assert (
+            result["status"]
+            == "completed"
+        )
 
-    assert (
-        result["result"]["hydrationStatus"]
-        == "VERY_WELL_HYDRATED"
-    )
+        assert (
+            result["result"]
+            is not None
+        )
 
-    assert (
-        result["result"]["recommendation"]
-        is not None
-    )
+        assert (
+            result["result"]["hydrationScore"]
+            >= 0
+        )
+
+        assert (
+            result["result"]["hydrationScore"]
+            <= 100
+        )
+
+        assert (
+            result["result"]["hydrationStatus"]
+            == "VERY_WELL_HYDRATED"
+        )
+
+        assert (
+            result["result"]["recommendation"]
+            is not None
+        )

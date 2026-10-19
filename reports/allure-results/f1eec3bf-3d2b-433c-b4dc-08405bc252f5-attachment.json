@@ -1,0 +1,12 @@
+{
+    "deviceId": "URINAL-001",
+    "userId": "USER-123",
+    "sessionId": "SESSION-dd32a2f8-ec35-4f6f-ab2c-1fbd2eb77cfe",
+    "startedAt": "2026-09-20T10:00:00Z",
+    "completedAt": "2026-09-20T10:00:18Z",
+    "sensorData": {
+        "volume": 320,
+        "ph": 6.2,
+        "temperature": 36.4
+    }
+}

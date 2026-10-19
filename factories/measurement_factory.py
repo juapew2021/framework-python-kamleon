@@ -1,174 +1,175 @@
+import json
 from uuid import uuid4
+from pathlib import Path
 
 
 class MeasurementFactory:
 
+    DATA_FOLDER = (
+        Path(__file__).parent.parent
+        / "data"
+        / "measurements"
+    )
+
+    @staticmethod
+    def _load(
+        filename
+    ):
+
+        file_path = (
+            MeasurementFactory.DATA_FOLDER
+            / filename
+        )
+
+        with open(
+            file_path,
+            encoding="utf-8"
+        ) as file:
+
+            return json.load(file)
+
+    @staticmethod
+    def _unique_session(
+        payload
+    ):
+
+        if "sessionId" in payload:
+
+            payload["sessionId"] = (
+                f"SESSION-{uuid4()}"
+            )
+
+        return payload
+
     @staticmethod
     def valid_measurement():
 
-        return {
-            "deviceId": "URINAL-001",
-            "userId": "USER-123",
-            "sessionId": f"SESSION-{uuid4()}",
-            "startedAt": "2026-09-20T10:00:00Z",
-            "completedAt": "2026-09-20T10:00:18Z",
-            "sensorData": {
-                "volume": 320,
-                "ph": 6.2,
-                "temperature": 36.4
-            }
-        }
+        payload = (
+            MeasurementFactory._load(
+                "valid_measurement.json"
+            )
+        )
 
-    @staticmethod
-    def insufficient_volume_measurement():
-
-        return {
-            "deviceId": "URINAL-001",
-            "userId": "USER-123",
-            "sessionId": "SESSION-999",
-            "startedAt": "2026-09-20T10:00:00Z",
-            "completedAt": "2026-09-20T10:00:18Z",
-            "sensorData": {
-                "volume": 50,
-                "ph": 6.2,
-                "temperature": 36.4
-            }
-        }
+        return (
+            MeasurementFactory
+            ._unique_session(
+                payload
+            )
+        )
 
     @staticmethod
     def anonymous_measurement():
 
-        return {
-            "deviceId": "URINAL-001",
-            "userId": None,
-            "sessionId": "SESSION-777",
-            "startedAt": "2026-09-20T10:00:00Z",
-            "completedAt": "2026-09-20T10:00:18Z",
-            "sensorData": {
-                "volume": 320,
-                "ph": 6.2,
-                "temperature": 36.4
-            }
-        }
+        payload = (
+            MeasurementFactory._load(
+                "anonymous_measurement.json"
+            )
+        )
+
+        return (
+            MeasurementFactory
+            ._unique_session(
+                payload
+            )
+        )
 
     @staticmethod
-    def extreme_ph_measurement():
+    def insufficient_volume_measurement():
 
-        return {
-            "deviceId": "URINAL-001",
-            "userId": "USER-123",
-            "sessionId": "SESSION-888",
-            "startedAt": "2026-09-20T10:00:00Z",
-            "completedAt": "2026-09-20T10:00:18Z",
-            "sensorData": {
-                "volume": 320,
-                "ph": 14.0,
-                "temperature": 36.4
-            }
-        }
+        payload = (
+            MeasurementFactory._load(
+                "insufficient_volume.json"
+            )
+        )
 
-    @staticmethod
-    def firmware_update_request():
-
-        return {
-            "version": "1.5.0"
-        }
+        return (
+            MeasurementFactory
+            ._unique_session(
+                payload
+            )
+        )
 
     @staticmethod
     def duplicate_measurement():
 
-        return MeasurementFactory.valid_measurement()
+        return (
+            MeasurementFactory._load(
+                "valid_measurement.json"
+            )
+        )
 
     @staticmethod
-    def disconnected_measurement():
+    def clinically_implausible_measurement(
+        hydration_score,
+        ph
+    ):
 
-        return MeasurementFactory.valid_measurement()
+        payload = (
+            MeasurementFactory._load(
+                "valid_measurement.json"
+            )
+        )
+
+        payload["sensorData"]["ph"] = ph
+
+        payload["sensorData"][
+            "hydrationScore"
+        ] = hydration_score
+
+        return payload
 
     @staticmethod
     def buffered_measurements():
 
-        measurements = []
-
-        for index, started_at in enumerate(
-            (
-                "2026-09-20T10:00:00Z",
-                "2026-09-20T10:01:00Z",
-                "2026-09-20T10:02:00Z"
-            )
-        ):
-            measurement = (
-                MeasurementFactory
-                .valid_measurement()
-            )
-            measurement["sessionId"] = (
-                f"BUFFERED-{uuid4()}"
-            )
-            measurement["startedAt"] = started_at
-            measurement["sensorData"]["volume"] = (
-                320 + index
-            )
-            measurements.append(measurement)
-
         return [
-            measurements[2],
-            measurements[0],
-            measurements[1]
+            MeasurementFactory.valid_measurement(),
+            MeasurementFactory.valid_measurement(),
+            MeasurementFactory.valid_measurement()
         ]
 
     @staticmethod
-    def backend_unavailable_measurement():
+    def disconnected_measurement():
 
-        measurement = (
-            MeasurementFactory
-            .valid_measurement()
+        payload = (
+            MeasurementFactory.valid_measurement()
         )
-        measurement["simulateUnavailableAttempts"] = 1
 
-        return measurement
+        payload["status"] = (
+            "disconnected"
+        )
+
+        return payload
 
     @staticmethod
     def malformed_api_response_measurement():
 
-        measurement = (
-            MeasurementFactory
-            .valid_measurement()
+        payload = (
+            MeasurementFactory.valid_measurement()
         )
-        measurement["malformedAnalysis"] = True
 
-        return measurement
+        payload["malformedAnalysis"] = True
+
+        return payload
 
     @staticmethod
-    def measurement_for_user(user_id):
+    def firmware_update_request():
 
-        measurement = (
-            MeasurementFactory
-            .valid_measurement()
+        return (
+            MeasurementFactory._load(
+                "firmware_update_request.json"
+            )
         )
-        measurement["userId"] = user_id
-
-        return measurement
-
-    @staticmethod
-    def clinically_implausible_measurement(
-        hydration_score=75,
-        ph=6.2
-    ):
-
-        measurement = (
-            MeasurementFactory
-            .valid_measurement()
-        )
-        measurement["sensorData"]["hydrationScore"] = (
-            hydration_score
-        )
-        measurement["sensorData"]["ph"] = ph
-
-        return measurement
 
     @staticmethod
     def firmware_update_failure_request():
 
-        return {
-            "version": "99.0.0",
-            "simulateFailure": True
-        }
+        payload = (
+            MeasurementFactory
+            .firmware_update_request()
+        )
+
+        payload["version"] = (
+            "INVALID-VERSION"
+        )
+
+        return payload

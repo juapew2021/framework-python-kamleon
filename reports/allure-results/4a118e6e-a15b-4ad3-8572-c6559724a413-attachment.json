@@ -1,0 +1,28 @@
+{
+    "measurementId": "MEAS-af0a8db7-b501-4221-af3d-8dd5c9c05d54",
+    "deviceId": "URINAL-001",
+    "userId": "USER-123",
+    "sessionId": "SESSION-79eebb87-21b2-4c7e-9f12-eb2d04cef343",
+    "startedAt": "2026-09-20T10:00:00Z",
+    "completedAt": "2026-09-20T10:00:18Z",
+    "sensorData": {
+        "volume": 320,
+        "ph": 6.2,
+        "temperature": 36.4
+    },
+    "status": "completed",
+    "result": {
+        "hydrationScore": 75,
+        "hydrationStatus": "VERY_WELL_HYDRATED",
+        "electrolytes": 25,
+        "electrolyteStatus": "BALANCED",
+        "volume": 320,
+        "volumeStatus": "EXCELLENT",
+        "recommendation": "Consider drinking electrolyte beverages.",
+        "clinicalStatus": "PLAUSIBLE"
+    },
+    "poll_count": 3,
+    "processingCount": 1,
+    "submissionAttempts": 1,
+    "malformedAnalysis": false
+}

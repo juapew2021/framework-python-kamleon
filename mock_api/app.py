@@ -278,7 +278,8 @@ def firmware_update(
 
     target_version = payload["version"]
 
-    if payload.get("simulateFailure"):
+    if target_version == "INVALID-VERSION":
+
         return JSONResponse(
             status_code=502,
             content={

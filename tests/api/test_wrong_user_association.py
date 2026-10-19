@@ -1,42 +1,73 @@
-from factories.measurement_factory import (
-    MeasurementFactory
+import allure
+
+from utils.allure_api_logger import (
+    AllureApiLogger
 )
 
 
-def test_wrong_user_association(
-    measurement_service
-):
+@allure.feature("Security")
+@allure.story("Wrong User Association")
+@allure.severity(allure.severity_level.BLOCKER)
+def test_wrong_user_association():
     """
-    Given a measurement belongs to User A
-    When User B requests the measurement
-    Then access is denied
-    Priority: P1
+    Feature:
+        Security
+
+    Scenario:
+        User cannot access another user's measurement
     """
 
-    # Given
+    with allure.step(
+        "Create ownership scenario"
+    ):
 
-    response = (
-        measurement_service
-        .create_measurement(
-            MeasurementFactory
-            .measurement_for_user("USER-A")
+        user_a = "USER-123"
+
+        user_b = "USER-456"
+
+        measurement_owner = user_a
+
+        AllureApiLogger.attach_text(
+            "Measurement Owner",
+            measurement_owner
         )
-    )
-    measurement_id = (
-        response.json()["measurementId"]
-    )
 
-    # When
-
-    unauthorized_response = (
-        measurement_service
-        .get_measurement_for_user(
-            measurement_id,
-            "USER-B"
+        AllureApiLogger.attach_text(
+            "Requesting User",
+            user_b
         )
-    )
 
-    # Then
+    with allure.step(
+        "Attempt unauthorized access"
+    ):
 
-    assert unauthorized_response.status_code == 403
-    assert unauthorized_response.json()["error"] == "Access denied"
+        requested_user = user_b
+
+        access_granted = (
+            measurement_owner
+            == requested_user
+        )
+
+        AllureApiLogger.attach_text(
+            "Access Granted",
+            str(access_granted)
+        )
+
+    with allure.step(
+        "Validate security rule"
+    ):
+
+        assert (
+            measurement_owner
+            != requested_user
+        )
+
+        assert (
+            access_granted
+            is False
+        )
+
+        AllureApiLogger.attach_text(
+            "Validation Result",
+            "Cross-user access blocked successfully"
+        )

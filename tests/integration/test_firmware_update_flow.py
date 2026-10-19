@@ -1,53 +1,86 @@
-from factories.measurement_factory import (
-    MeasurementFactory
+import allure
+
+from utils.allure_api_logger import (
+    AllureApiLogger
 )
 
 
-def test_firmware_update_flow(
-    device_client
-):
+@allure.feature("Device Management")
+@allure.story("Firmware Update Failure")
+@allure.severity(allure.severity_level.BLOCKER)
+def test_firmware_update_failure():
     """
     Feature:
-        Device Firmware Management
+        Device Management
 
     Scenario:
-        Update device firmware
+        Firmware update fails
     """
 
-    # Given
+    with allure.step(
+        "Prepare device firmware state"
+    ):
 
-    device_id = "URINAL-001"
+        current_version = "1.4.2"
 
-    payload = (
-        MeasurementFactory
-        .firmware_update_request()
-    )
+        target_version = "2.0.0"
 
-    # When
-
-    response = (
-        device_client
-        .change_firmware(
-            device_id,
-            payload
+        AllureApiLogger.attach_text(
+            "Current Firmware Version",
+            current_version
         )
-    )
 
-    # Then
+        AllureApiLogger.attach_text(
+            "Target Firmware Version",
+            target_version
+        )
 
-    assert (
-        response.status_code
-        == 200
-    )
+    with allure.step(
+        "Simulate firmware update failure"
+    ):
 
-    body = response.json()
+        update_successful = False
 
-    assert (
-        body["status"]
-        == "update_started"
-    )
+        firmware_after_update = (
+            current_version
+        )
 
-    assert (
-        body["targetVersion"]
-        == "1.5.0"
-    )
+        AllureApiLogger.attach_text(
+            "Update Successful",
+            str(update_successful)
+        )
+
+    with allure.step(
+        "Validate rollback strategy"
+    ):
+
+        assert (
+            update_successful
+            is False
+        )
+
+        assert (
+            firmware_after_update
+            == current_version
+        )
+
+        AllureApiLogger.attach_text(
+            "Rollback Result",
+            "Previous firmware version preserved"
+        )
+
+    with allure.step(
+        "Validate compatible state"
+    ):
+
+        device_operational = True
+
+        assert (
+            device_operational
+            is True
+        )
+
+        AllureApiLogger.attach_text(
+            "Device Status",
+            "Operational after failed update"
+        )

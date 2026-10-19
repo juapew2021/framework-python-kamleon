@@ -1,0 +1,1 @@
+System should retry or queue the measurement without data loss
