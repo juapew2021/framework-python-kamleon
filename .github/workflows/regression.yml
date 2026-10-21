@@ -35,9 +35,13 @@ jobs:
           pip install -r requirements.txt
           pip install allure-pytest
 
-      - name: Verify Pytest Plugins
+      - name: Verify Allure Plugin
         run: |
           pytest --help | grep alluredir
+
+      - name: Create Reports Folder
+        run: |
+          mkdir -p reports/allure-results
 
       - name: Start Mock API
         run: |
