@@ -1,8 +1,10 @@
+import pytest
 from factories.measurement_factory import (
     MeasurementFactory
 )
 
 
+@pytest.mark.xray("SCRUM-35")
 def test_insufficient_volume_measurement(
     measurement_service
 ):

@@ -1,3 +1,6 @@
+import pytest
+
+@pytest.mark.xray("SCRUM-29")
 def test_change_device_to_maintenance_mode(
     device_service
 ):

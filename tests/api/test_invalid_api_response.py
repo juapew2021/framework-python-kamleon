@@ -8,6 +8,7 @@ from services.measurement_service import (
 )
 
 
+@pytest.mark.xray("SCRUM-40")
 def test_invalid_api_response(
     measurement_service
 ):

@@ -1,8 +1,10 @@
+import pytest
 from factories.measurement_factory import (
     MeasurementFactory
 )
 
 
+@pytest.mark.xray("SCRUM-33")
 def test_recommendation_generated(
     measurement_service
 ):

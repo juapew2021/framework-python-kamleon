@@ -6,3 +6,4 @@ pyyaml==6.0.2
 faker==30.8.2
 pytest-html==4.1.1
 allure-pytest
+pytest-jira-xray==0.9.4

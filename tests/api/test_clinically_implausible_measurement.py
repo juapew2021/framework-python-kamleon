@@ -8,9 +8,24 @@ from factories.measurement_factory import (
 @pytest.mark.parametrize(
     ("hydration_score", "ph"),
     [
-        (101, 6.2),
-        (-1, 6.2),
-        (75, 14.0)
+        # TC-015 (SCRUM-42) + TC-016 (SCRUM-43): hydration score above range
+        pytest.param(
+            101, 6.2,
+            id="score_above_range",
+            marks=pytest.mark.xray(["SCRUM-42", "SCRUM-43"])
+        ),
+        # TC-015 (SCRUM-42) + TC-016 (SCRUM-43): hydration score below range
+        pytest.param(
+            -1, 6.2,
+            id="score_below_range",
+            marks=pytest.mark.xray(["SCRUM-42", "SCRUM-43"])
+        ),
+        # TC-015 (SCRUM-42) + TC-017 (SCRUM-44): pH outside physiological range
+        pytest.param(
+            75, 14.0,
+            id="extreme_ph",
+            marks=pytest.mark.xray(["SCRUM-42", "SCRUM-44"])
+        )
     ]
 )
 def test_clinically_implausible_measurement(

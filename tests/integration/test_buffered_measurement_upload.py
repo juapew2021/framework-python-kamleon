@@ -1,8 +1,10 @@
+import pytest
 from factories.measurement_factory import (
     MeasurementFactory
 )
 
 
+@pytest.mark.xray("SCRUM-38")
 def test_buffered_measurement_upload(
     measurement_service
 ):

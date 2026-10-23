@@ -1,3 +1,4 @@
+import pytest
 import allure
 
 from factories.measurement_factory import (
@@ -12,6 +13,7 @@ from utils.allure_api_logger import (
 @allure.feature("Measurement Processing")
 @allure.story("Complete Measurement Lifecycle")
 @allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.xray("SCRUM-28")
 def test_measurement_complete_flow(
     measurement_service
 ):

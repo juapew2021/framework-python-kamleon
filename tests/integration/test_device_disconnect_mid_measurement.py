@@ -1,8 +1,10 @@
+import pytest
 from factories.measurement_factory import (
     MeasurementFactory
 )
 
 
+@pytest.mark.xray("SCRUM-37")
 def test_device_disconnect_mid_measurement(
     measurement_service
 ):

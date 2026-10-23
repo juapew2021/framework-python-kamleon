@@ -1,8 +1,10 @@
+import pytest
 from factories.measurement_factory import (
     MeasurementFactory
 )
 
 
+@pytest.mark.xray("SCRUM-32")
 def test_hydration_score_generation(
     measurement_service
 ):
