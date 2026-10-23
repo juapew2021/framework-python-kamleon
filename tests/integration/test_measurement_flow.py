@@ -14,6 +14,7 @@ from utils.allure_api_logger import (
 @allure.story("Complete Measurement Lifecycle")
 @allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.xray("SCRUM-28")
+@pytest.mark.smoke
 def test_measurement_complete_flow(
     measurement_service
 ):

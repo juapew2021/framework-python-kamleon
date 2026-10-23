@@ -10,6 +10,7 @@ from utils.allure_api_logger import (
 @allure.story("Wrong User Association")
 @allure.severity(allure.severity_level.BLOCKER)
 @pytest.mark.xray("SCRUM-41")
+@pytest.mark.sanity
 def test_wrong_user_association():
     """
     Feature:

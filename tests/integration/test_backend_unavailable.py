@@ -10,6 +10,7 @@ from utils.allure_api_logger import (
 @allure.story("Backend Unavailable")
 @allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.xray("SCRUM-39")
+@pytest.mark.sanity
 def test_backend_unavailable():
     """
     Feature:

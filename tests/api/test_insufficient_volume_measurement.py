@@ -5,6 +5,7 @@ from factories.measurement_factory import (
 
 
 @pytest.mark.xray("SCRUM-35")
+@pytest.mark.sanity
 def test_insufficient_volume_measurement(
     measurement_service
 ):

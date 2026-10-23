@@ -5,6 +5,7 @@ from factories.measurement_factory import (
 
 
 @pytest.mark.xray("SCRUM-33")
+@pytest.mark.smoke
 def test_recommendation_generated(
     measurement_service
 ):

@@ -5,6 +5,7 @@ from factories.measurement_factory import (
 
 
 @pytest.mark.xray("SCRUM-31")
+@pytest.mark.sanity
 def test_firmware_update_failure(
     device_service
 ):

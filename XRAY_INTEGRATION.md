@@ -64,3 +64,31 @@ pytest --jira-xray --xraypath=xray-report.json --allow-duplicate-ids
 
 `--allow-duplicate-ids` es necesario porque los tres casos del test parametrizado de
 plausibilidad clínica reportan también a TC-015 (SCRUM-42).
+
+## Suites por etiqueta (Smoke / Sanity / Regresión)
+
+Los tests llevan markers de pytest (`@pytest.mark.smoke`, `@pytest.mark.sanity`) registrados en
+`pytest.ini` con `--strict-markers`. Los Test de Xray llevan las mismas etiquetas en Jira
+(`smoke`, `sanity`), de modo que se pueden filtrar también allí (p. ej. `labels = smoke`).
+
+| Suite | Marker | Casos |
+|---|---|---|
+| Smoke Test | `smoke` | TC-001, TC-002, TC-003, TC-005, TC-006 |
+| Sanity Test | `sanity` | TC-004, TC-008, TC-009, TC-012, TC-014, TC-015 (+ TC-016 y TC-017, mismo test parametrizado) |
+| Regresión | — | Los 17 casos |
+
+Ejecución local:
+
+```bash
+pytest -m smoke                 # o: make smoke   / ./run_qa.sh smoke
+pytest -m sanity                # o: make sanity  / ./run_qa.sh sanity
+pytest                          # regresión completa: make test / ./run_qa.sh
+pytest -m "smoke or sanity"     # combinaciones
+```
+
+En GitHub Actions: **Actions → QA Regression Suite → Run workflow** y elegir la suite
+(`regression`, `smoke` o `sanity`). Los push y pull requests ejecutan siempre la regresión completa.
+La Test Execution creada en Xray indica la suite en el título, p. ej.
+`Ejecución automatizada (Smoke Test) - main #12`.
+
+Para mover un test de suite basta con cambiar su marker en el código y la etiqueta del Test en Jira.
