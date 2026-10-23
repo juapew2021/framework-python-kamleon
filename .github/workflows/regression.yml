@@ -12,6 +12,16 @@ on:
       - master
 
   workflow_dispatch:
+    inputs:
+      suite:
+        description: "Suite de pruebas a ejecutar"
+        required: true
+        default: regression
+        type: choice
+        options:
+          - regression
+          - smoke
+          - sanity
 
 jobs:
 
@@ -55,9 +65,19 @@ jobs:
           XRAY_CLIENT_ID: ${{ secrets.XRAY_CLIENT_ID }}
           XRAY_CLIENT_SECRET: ${{ secrets.XRAY_CLIENT_SECRET }}
           XRAY_API_BASE_URL: ${{ vars.XRAY_API_BASE_URL || 'https://xray.cloud.getxray.app' }}
-          XRAY_EXECUTION_SUMMARY: "Regresión automatizada - ${{ github.ref_name }} #${{ github.run_number }}"
+          # push / pull_request -> regression; manual runs -> the selected suite
+          SUITE: ${{ inputs.suite || 'regression' }}
           XRAY_EXECUTION_REVISION: ${{ github.sha }}
         run: |
+          case "$SUITE" in
+            smoke)      MARK_ARGS="-m smoke";  SUITE_NAME="Smoke Test" ;;
+            sanity)     MARK_ARGS="-m sanity"; SUITE_NAME="Sanity Test" ;;
+            regression) MARK_ARGS="";          SUITE_NAME="Regresión" ;;
+            *) echo "Unknown suite: $SUITE"; exit 1 ;;
+          esac
+          echo "Running suite: $SUITE_NAME"
+          export XRAY_EXECUTION_SUMMARY="Ejecución automatizada ($SUITE_NAME) - ${{ github.ref_name }} #${{ github.run_number }}"
+
           XRAY_ARGS=""
           if [ -n "$XRAY_CLIENT_ID" ] && [ -n "$XRAY_CLIENT_SECRET" ]; then
             XRAY_ARGS="--jira-xray --cloud --client-secret-auth --allow-duplicate-ids"
@@ -65,7 +85,7 @@ jobs:
           else
             echo "Xray secrets not configured: results will not be published"
           fi
-          pytest -v --alluredir=reports/allure-results $XRAY_ARGS
+          pytest -v --alluredir=reports/allure-results $MARK_ARGS $XRAY_ARGS
 
       - name: Upload Allure Results
         uses: actions/upload-artifact@v4

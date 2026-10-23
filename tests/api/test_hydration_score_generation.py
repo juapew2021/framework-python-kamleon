@@ -5,6 +5,7 @@ from factories.measurement_factory import (
 
 
 @pytest.mark.xray("SCRUM-32")
+@pytest.mark.smoke
 def test_hydration_score_generation(
     measurement_service
 ):

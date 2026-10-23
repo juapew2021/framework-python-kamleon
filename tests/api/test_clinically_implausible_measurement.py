@@ -5,6 +5,7 @@ from factories.measurement_factory import (
 )
 
 
+@pytest.mark.sanity
 @pytest.mark.parametrize(
     ("hydration_score", "ph"),
     [

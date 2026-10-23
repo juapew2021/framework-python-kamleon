@@ -10,6 +10,7 @@ from factories.measurement_factory import (
 @allure.story("Firmware Update Success")
 @allure.severity(allure.severity_level.BLOCKER)
 @pytest.mark.xray("SCRUM-30")
+@pytest.mark.smoke
 def test_firmware_update_success(
     device_service
 ):
