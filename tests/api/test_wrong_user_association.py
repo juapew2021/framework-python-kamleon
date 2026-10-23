@@ -1,3 +1,4 @@
+import pytest
 import allure
 
 from utils.allure_api_logger import (
@@ -8,6 +9,7 @@ from utils.allure_api_logger import (
 @allure.feature("Security")
 @allure.story("Wrong User Association")
 @allure.severity(allure.severity_level.BLOCKER)
+@pytest.mark.xray("SCRUM-41")
 def test_wrong_user_association():
     """
     Feature:

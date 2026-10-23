@@ -1,3 +1,4 @@
+import pytest
 import allure
 
 from utils.allure_api_logger import (
@@ -8,6 +9,7 @@ from utils.allure_api_logger import (
 @allure.feature("Reliability")
 @allure.story("Backend Unavailable")
 @allure.severity(allure.severity_level.CRITICAL)
+@pytest.mark.xray("SCRUM-39")
 def test_backend_unavailable():
     """
     Feature:
